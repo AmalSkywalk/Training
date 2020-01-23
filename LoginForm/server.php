@@ -1,4 +1,7 @@
 <?php 
+
+		session_start();
+
 	$username="";
 	$email="";
 	$gender="";
@@ -18,11 +21,7 @@
 		if (!filter_var($email,FILTER_VALIDATE_EMAIL)) {
 			$errors['email']="Invalid email";
 		}
-		if(empty($gender))
-		{
-			$errors['gender']="Gender is required";
-		}
-
+		
 		$emailQuery="SELECT * FROM users WHERE email=? LIMIT 1";
 		$stmt = $db->prepare($emailQuery);
 		$stmt->bind_param('s',$email);
@@ -32,7 +31,7 @@
 
 		if ($userCount>0) {
 		
-				$errors['email']="Email already exists";
+				$errors['email']="Email already exists!";
 		}
 
 		if(count($errors)===0){
@@ -40,7 +39,21 @@
 			$password= md5($password_1);			//encryption
 			$sql = "INSERT INTO users(username, email, password, gender, country)
 						VALUES ('$username', '$email', '$password', '$gender', '$country')";
-			mysqli_query($db, $sql);
+			if(mysqli_query($db, $sql)){
+
+					$user_id = $db->insert_id;
+					$_SESSION['id'] = $user_id;
+					$_SESSION['username'] = $username;
+					$_SESSION['email'] = $email;
+					
+					$_SESSION['message']="You are now logged in!";
+					$_SESSION['alert-class'] = "alert-success";
+					header('location: home.php');
+					exit();
+			}
+
+
+
 		}
 	}
 

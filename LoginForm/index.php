@@ -34,6 +34,23 @@
 				<i style="color: grey;"> Please fill the form.</i>
 
 				<form name="registration" method="post" action="index.php">
+
+				<?php if(count($errors) > 0): ?>
+					<div class="alert alert-danger alert-dismissible fade show ">
+						<button type="button" class="close" data-dismiss="alert"> &times;</button>
+						<?php foreach ($errors as $error): ?> 
+							<?php echo $error; ?>
+						<?php endforeach; ?>
+					</div>
+				<?php else : ?>
+						<script >
+							function alertFunc(){
+								alert("Registration success!")
+							}
+							
+						</script>
+				<?php endif; ?>
+
 				<div class="form-group">
 					<label class="control-label" for="name">Username</label> <span class="errors">* <br></span>
 					<input type="text" name="name" id="name" class="form-control"  placeholder="Full Name" value="<?php echo $username; ?>" />
@@ -55,7 +72,7 @@
 				</div>
 
 				<div class="form-group">
-					<label class="control-label" for="gender" >Gender</label> <span class="errors">* </span><br/> 
+					<label class="control-label" for="gender" >Gender</label> <br>
 					<input type="radio" name="gender" value="female"  />  Female
 					<input type="radio" name="gender" value="male"  />  Male
 					<input type="radio" name="gender" value="other" />  Other
